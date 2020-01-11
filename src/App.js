@@ -1,5 +1,14 @@
 import React from "react";
-import { Button, InputNumber, Select } from "antd";
+import {
+	Button,
+	InputNumber,
+	Select,
+	Card,
+	Statistic,
+	Icon,
+	message,
+	Menu
+} from "antd";
 import "./Style/main.sass";
 
 const { Option } = Select;
@@ -8,68 +17,132 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {};
+		this.state = {
+			Investment: null,
+			Direction: "Long",
+			Leverage: null,
+			EntryPrice: null,
+			ExitPrice: null,
+			Result: 0,
+			stat: {
+				color: "#3f8600",
+				arrow: "arrow-up"
+			}
+		};
 	}
-	onChangeInvestment = value => {
-		console.log("changed", value);
-	};
 
+	onChangeInvestment = value => {
+		this.setState({ Investment: value });
+		console.log(value);
+	};
 	onChangeDirection = value => {
-		console.log("changed", value);
+		this.setState({ Direction: value });
 	};
 	onchangeLeverage = value => {
-		console.log("changed", value);
+		this.setState({ Leverage: value });
 	};
 	onChangeEntryPrice = value => {
-		console.log("changed", value);
+		this.setState({ EntryPrice: value });
 	};
 	onchangeExitPrice = value => {
-		console.log("changed", value);
+		this.setState({ ExitPrice: value });
 	};
 
-	Calc = () => {};
+	Calc = () => {
+		if (
+			this.state.Investment === null ||
+			this.state.Leverage === null ||
+			this.state.EntryPrice === null ||
+			this.state.ExitPrice === null
+		) {
+			message.error("Please fill empty fields");
+		} else {
+			const result =
+				((this.state.ExitPrice - this.state.EntryPrice) *
+					this.state.Investment *
+					this.state.Leverage) /
+				this.state.EntryPrice;
+
+			this.setState({ Result: result });
+
+			if (result >= 0) {
+				this.setState({
+					stat: { color: "#3f8600", arrow: "arrow-up" }
+				});
+			} else {
+				this.setState({
+					stat: { color: "#cf1322", arrow: "arrow-down" }
+				});
+			}
+		}
+	};
 
 	render() {
 		return (
 			<div className="App">
-				<div className="form">
-					<InputNumber
-						min={1}
-						defaultValue={10}
-						formatter={value =>
-							`$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-						}
-						parser={value => value.replace(/\$\s?|(,*)/g, "")}
-						step={10}
-						onChange={this.onChange}
-					/>
-					<Select
-						defaultValue="Long"
-						style={{ width: 120 }}
-						onChange={this.onChangeDirection}
-					>
-						<Option value="long">Long</Option>
-						<Option value="short">Short</Option>
-					</Select>
-					<InputNumber
-						min={1}
-						defaultValue={5}
-						onChange={this.onchangeLeverage}
-					/>
-					<InputNumber
-						min={0.1}
-						placeholder="34"
-						onChange={this.onChangeEntryPrice}
-					/>
-					<InputNumber
-						min={0.1}
-						placeholder="36"
-						onChange={this.onChangeExitPrice}
-					/>
-					<Button type="primary" block onClick={this.Calc}>
-						Calc
-					</Button>
-				</div>
+				<Menu
+					onClick={this.handleClick}
+					selectedKeys={[this.state.current]}
+					mode="horizontal"
+					theme="dark"
+				>
+					<Menu.Item key="mail">
+						<Icon type="calculator" />
+						CFD Calc
+					</Menu.Item>
+				</Menu>
+				<section id="form">
+					<div className="form">
+						<InputNumber
+							min={1}
+							placeholder={5}
+							formatter={value =>
+								`$ ${value}`.replace(
+									/\B(?=(\d{3})+(?!\d))/g,
+									","
+								)
+							}
+							parser={value => value.replace(/\$\s?|(,*)/g, "")}
+							step={10}
+							onChange={this.onChangeInvestment}
+						/>
+						<Select
+							defaultValue="Long"
+							onChange={this.onChangeDirection}
+						>
+							<Option value="long">Long</Option>
+							<Option value="short">Short</Option>
+						</Select>
+						<InputNumber
+							min={1}
+							placeholder="Leverage"
+							onChange={this.onchangeLeverage}
+						/>
+						<InputNumber
+							min={0.1}
+							placeholder="Entry Price"
+							onChange={this.onChangeEntryPrice}
+						/>
+						<InputNumber
+							min={0.1}
+							placeholder="Exit Price"
+							onChange={this.onchangeExitPrice}
+						/>
+						<Button type="danger" block onClick={this.Calc}>
+							CALC
+						</Button>
+						<Card>
+							<Statistic
+								title="Result"
+								value={this.state.Result}
+								precision={2}
+								valueStyle={{ color: this.state.stat.color }}
+								prefix="$"
+								suffix={<Icon type={this.state.stat.arrow} />}
+							/>
+						</Card>
+					</div>
+				</section>
 			</div>
 		);
 	}
