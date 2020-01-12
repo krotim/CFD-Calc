@@ -9,10 +9,9 @@ import {
 	message,
 	Menu
 } from "antd";
+import { Link } from "react-router-dom";
+import * as ROUTES from "./Constants/routes";
 import "./Style/main.sass";
-
-import News from "./Components/News";
-import Login from "./Components/Login";
 
 const { Option } = Select;
 
@@ -92,15 +91,13 @@ class App extends React.Component {
 	render() {
 		return (
 			<div className="App">
-				<Menu
-					onClick={this.handleClick}
-					selectedKeys={[this.state.current]}
-					mode="horizontal"
-					theme="dark"
-				>
-					<Menu.Item key="mail">
+				<Menu onClick={this.handleClick} mode="horizontal" theme="dark">
+					<Menu.Item key="main">
 						<Icon type="calculator" />
 						CFD Calc
+					</Menu.Item>
+					<Menu.Item className="login-link" key="login">
+						<Link to={ROUTES.LOG_IN}>Login/Signup</Link>
 					</Menu.Item>
 				</Menu>
 				<section id="form">
@@ -155,8 +152,6 @@ class App extends React.Component {
 						</Card>
 					</div>
 				</section>
-				<News />
-				<Login />
 			</div>
 		);
 	}

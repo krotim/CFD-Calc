@@ -1,15 +1,34 @@
 import React, { Component } from "react";
-import { Form, Icon, Input, Button, Checkbox } from "antd";
+import { Form, Icon, Input, Button, Checkbox, notification } from "antd";
+import * as ROUTES from "../Constants/routes";
+import { Link } from "react-router-dom";
+import firebase from "../Constants/firebase";
 
 class Login extends Component {
 	handleSubmit = e => {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
+			var email = values.email;
+			var password = values.password;
+
 			if (!err) {
-				console.log("Received values of form: ", values);
+				firebase
+					.auth()
+					.createUserWithEmailAndPassword(email, password)
+					.catch(function(error) {
+						// Handle Errors here.
+						var errorCode = error.code;
+						var errorMessage = error.message;
+						notification["error"]({
+							message: errorCode,
+							description: errorMessage
+						});
+					});
 			}
 		});
 	};
+
+	test = () => {};
 
 	render() {
 		const { getFieldDecorator } = this.props.form;
@@ -17,11 +36,11 @@ class Login extends Component {
 			<div>
 				<Form onSubmit={this.handleSubmit} className="login-form">
 					<Form.Item>
-						{getFieldDecorator("username", {
+						{getFieldDecorator("email", {
 							rules: [
 								{
 									required: true,
-									message: "Please input your username!"
+									message: "Please input your email!"
 								}
 							]
 						})(
@@ -32,7 +51,7 @@ class Login extends Component {
 										style={{ color: "rgba(0,0,0,.25)" }}
 									/>
 								}
-								placeholder="Username"
+								placeholder="E-Mail"
 							/>
 						)}
 					</Form.Item>
@@ -69,7 +88,7 @@ class Login extends Component {
 						>
 							Log in
 						</Button>
-						Or <a href="#">register now!</a>
+						Or <Link to={ROUTES.SIGN_UP}>Register now</Link>
 					</Form.Item>
 				</Form>
 			</div>
