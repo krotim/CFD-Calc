@@ -10,7 +10,9 @@ import {
 	Menu
 } from "antd";
 import "./Style/main.sass";
+
 import News from "./Components/News";
+import Login from "./Components/Login";
 
 const { Option } = Select;
 
@@ -154,6 +156,7 @@ class App extends React.Component {
 					</div>
 				</section>
 				<News />
+				<Login />
 			</div>
 		);
 	}
