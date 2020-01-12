@@ -10,6 +10,7 @@ import {
 	Menu
 } from "antd";
 import "./Style/main.sass";
+import News from "./Components/News";
 
 const { Option } = Select;
 
@@ -33,7 +34,6 @@ class App extends React.Component {
 
 	onChangeInvestment = value => {
 		this.setState({ Investment: value });
-		console.log(value);
 	};
 	onChangeDirection = value => {
 		this.setState({ Direction: value });
@@ -49,6 +49,8 @@ class App extends React.Component {
 	};
 
 	Calc = () => {
+		var result;
+
 		if (
 			this.state.Investment === null ||
 			this.state.Leverage === null ||
@@ -57,11 +59,19 @@ class App extends React.Component {
 		) {
 			message.error("Please fill empty fields");
 		} else {
-			const result =
-				((this.state.ExitPrice - this.state.EntryPrice) *
-					this.state.Investment *
-					this.state.Leverage) /
-				this.state.EntryPrice;
+			if (this.state.Direction === "Long") {
+				result =
+					((this.state.ExitPrice - this.state.EntryPrice) *
+						this.state.Investment *
+						this.state.Leverage) /
+					this.state.EntryPrice;
+			} else {
+				result =
+					((this.state.EntryPrice - this.state.ExitPrice) *
+						this.state.Investment *
+						this.state.Leverage) /
+					this.state.EntryPrice;
+			}
 
 			this.setState({ Result: result });
 
@@ -110,8 +120,8 @@ class App extends React.Component {
 							defaultValue="Long"
 							onChange={this.onChangeDirection}
 						>
-							<Option value="long">Long</Option>
-							<Option value="short">Short</Option>
+							<Option value="Long">Long</Option>
+							<Option value="Short">Short</Option>
 						</Select>
 						<InputNumber
 							min={1}
@@ -143,6 +153,7 @@ class App extends React.Component {
 						</Card>
 					</div>
 				</section>
+				<News />
 			</div>
 		);
 	}
