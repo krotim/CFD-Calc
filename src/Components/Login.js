@@ -1,20 +1,36 @@
 import React, { Component } from "react";
 import { Form, Icon, Input, Button, Checkbox, notification } from "antd";
 import * as ROUTES from "../Constants/routes";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import firebase from "../Constants/firebase";
 
 class Login extends Component {
+	state = {
+		isLoading: false,
+		redirect: "/"
+	};
+
 	handleSubmit = e => {
 		e.preventDefault();
+
+		this.setState({ isLoading: true });
+
 		this.props.form.validateFields((err, values) => {
 			var email = values.email;
 			var password = values.password;
 
 			if (!err) {
+				this.setState({ isLoading: false });
 				firebase
 					.auth()
-					.createUserWithEmailAndPassword(email, password)
+					.signInWithEmailAndPassword(email, password)
+					.then(() => {
+						notification["success"]({
+							message: "Success",
+							description: "You are logged in!"
+						});
+						this.props.history.push("/");
+					})
 					.catch(function(error) {
 						// Handle Errors here.
 						var errorCode = error.code;
@@ -85,6 +101,8 @@ class Login extends Component {
 							type="primary"
 							htmlType="submit"
 							className="login-form-button"
+							loading={this.state.isLoading}
+							onClick={this.handelClick}
 						>
 							Log in
 						</Button>
@@ -98,4 +116,4 @@ class Login extends Component {
 
 const WrappedLoginForm = Form.create({ name: "normal_login" })(Login);
 
-export default WrappedLoginForm;
+export default withRouter(WrappedLoginForm);
