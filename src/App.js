@@ -21,6 +21,7 @@ class App extends React.Component {
 		super(props);
 
 		this.state = {
+			isLoggedIn: true,
 			Investment: null,
 			Direction: "Long",
 			Leverage: null,
@@ -33,6 +34,8 @@ class App extends React.Component {
 			}
 		};
 	}
+
+	componentDidMount() {}
 
 	onChangeInvestment = value => {
 		this.setState({ Investment: value });
@@ -89,7 +92,30 @@ class App extends React.Component {
 		}
 	};
 
+	signOut = () => {
+		firebase
+			.auth()
+			.signOut()
+			.then(function() {})
+			.catch(function(error) {
+				// An error happened.
+			});
+	};
+
 	render() {
+		const isLoggedIn = this.state.isLoggedIn;
+		let button;
+
+		if (isLoggedIn) {
+			button = (
+				<Button onClick={this.signOut} type="danger">
+					SignOut
+				</Button>
+			);
+		} else {
+			button = <Link to={ROUTES.LOG_IN}>Login/Signup</Link>;
+		}
+
 		return (
 			<div className="App">
 				<Menu onClick={this.handleClick} mode="horizontal" theme="dark">
@@ -98,7 +124,7 @@ class App extends React.Component {
 						CFD Calc
 					</Menu.Item>
 					<Menu.Item className="login-link" key="login">
-						<Link to={ROUTES.LOG_IN}>Login/Signup</Link>
+						{button}
 					</Menu.Item>
 				</Menu>
 				<section id="form">
