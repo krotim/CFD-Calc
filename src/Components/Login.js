@@ -6,8 +6,7 @@ import firebase from "../Constants/firebase";
 
 class Login extends Component {
 	state = {
-		isLoading: false,
-		redirect: "/"
+		isLoading: false
 	};
 
 	handleSubmit = e => {

@@ -7,7 +7,8 @@ import {
 	Statistic,
 	Icon,
 	message,
-	Menu
+	Menu,
+	notification
 } from "antd";
 import { Link } from "react-router-dom";
 import * as ROUTES from "./Constants/routes";
@@ -21,7 +22,7 @@ class App extends React.Component {
 		super(props);
 
 		this.state = {
-			isLoggedIn: true,
+			isLoggedIn: false,
 			Investment: null,
 			Direction: "Long",
 			Leverage: null,
@@ -35,7 +36,23 @@ class App extends React.Component {
 		};
 	}
 
-	componentDidMount() {}
+	componentDidMount() {
+		this.checkIfUserIsLoggedIn();
+	}
+
+	checkIfUserIsLoggedIn = () => {
+		var user = firebase.auth().currentUser;
+
+		if (user) {
+			this.setState({
+				isLoggedIn: true
+			});
+		} else {
+			this.setState({
+				isLoggedIn: false
+			});
+		}
+	};
 
 	onChangeInvestment = value => {
 		this.setState({ Investment: value });
@@ -96,13 +113,19 @@ class App extends React.Component {
 		firebase
 			.auth()
 			.signOut()
-			.then(function() {})
+			.then(function() {
+				window.location.reload();
+			})
 			.catch(function(error) {
-				// An error happened.
+				notification["error"]({
+					message: "Error",
+					description: error
+				});
 			});
 	};
 
 	render() {
+		//Render login/signup button conditionaly
 		const isLoggedIn = this.state.isLoggedIn;
 		let button;
 

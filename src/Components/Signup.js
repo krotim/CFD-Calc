@@ -9,11 +9,12 @@ import {
 	notification
 } from "antd";
 import firebase from "../Constants/firebase";
+import "firebase/firestore";
+import { withRouter } from "react-router-dom";
 
 class Signup extends Component {
 	state = {
-		confirmDirty: false,
-		autoCompleteResult: []
+		confirmDirty: false
 	};
 
 	handleSubmit = e => {
@@ -21,21 +22,29 @@ class Signup extends Component {
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			var email = values.email;
 			var password = values.password;
+			var username = values.username;
 
 			if (!err) {
 				firebase
 					.auth()
 					.createUserWithEmailAndPassword(email, password)
-					.then(() => {
+					.then(user => {
+						const db = firebase.firestore();
+
+						db.collection("users").add({
+							username: username
+						});
+
 						notification["success"]({
 							message: "Success",
 							description: "You are in!"
 						});
+						this.props.history.push("/");
 					})
 					.catch(function(error) {
-						// Handle Errors here.
 						var errorCode = error.code;
 						var errorMessage = error.message;
+
 						notification["error"]({
 							message: errorCode,
 							description: errorMessage
@@ -116,18 +125,18 @@ class Signup extends Component {
 					<Form.Item
 						label={
 							<span>
-								Nickname&nbsp;
+								Username&nbsp;
 								<Tooltip title="What do you want others to call you?">
 									<Icon type="question-circle-o" />
 								</Tooltip>
 							</span>
 						}
 					>
-						{getFieldDecorator("nickname", {
+						{getFieldDecorator("username", {
 							rules: [
 								{
 									required: true,
-									message: "Please input your nickname!",
+									message: "Please input your username!",
 									whitespace: true
 								}
 							]
@@ -138,7 +147,10 @@ class Signup extends Component {
 							valuePropName: "checked"
 						})(
 							<Checkbox>
-								I have read the <a>agreement</a>
+								I have read the{" "}
+								<a href="http://www.africau.edu/images/default/sample.pdf">
+									agreement
+								</a>
 							</Checkbox>
 						)}
 					</Form.Item>
@@ -154,4 +166,4 @@ class Signup extends Component {
 }
 
 const WrappedRegistrationForm = Form.create({ name: "register" })(Signup);
-export default WrappedRegistrationForm;
+export default withRouter(WrappedRegistrationForm);
