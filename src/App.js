@@ -146,7 +146,7 @@ class App extends React.Component {
 						<Icon type="calculator" />
 						CFD Calc
 					</Menu.Item>
-					<Menu.Item className="login-link" key="login">
+					<Menu.Item className="float-right" key="login">
 						{button}
 					</Menu.Item>
 				</Menu>

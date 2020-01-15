@@ -1,68 +1,43 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
+## CFD Calc
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm install` > `npm start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Description
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+##### CFD calc is simple web app that helps you decide in which CFD you should invest based on few key things
 
-### `npm test`
+#### 1. Investment
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### 2. Direction
 
-### `npm run build`
+#### 3. Leverage
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### 4. Entry Price
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+#### 5. Exit Price
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Formula for Long direction
 
-### `npm run eject`
+```sh
+(ExitPrice - EntryPrice) * Investment * Leverage)) / EntryPrice;
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Formula for Short direction
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```sh
+(EntryPrice - ExitPrice) * Investment * Leverage)) / EntryPrice;
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Benefits of being a user
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+If you plan on using this usually you should consider singing up, and here is why
 
-## Learn More
+#### Symbols
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Investors mostly have few cfds/stocks in which they invest, so that is why if you are user you have an option to save 5 cfds/stocks symbols so when you land on main page you can use them as call to retrieve current cfd/stock price
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### News
 
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+By searching for some cfd/stock company like "APPLE" in your search input you will get latest news that can affect cfd/stock price.

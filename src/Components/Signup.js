@@ -28,13 +28,7 @@ class Signup extends Component {
 				firebase
 					.auth()
 					.createUserWithEmailAndPassword(email, password)
-					.then(user => {
-						const db = firebase.firestore();
-
-						db.collection("users").add({
-							username: username
-						});
-
+					.then(() => {
 						notification["success"]({
 							message: "Success",
 							description: "You are in!"

@@ -31,7 +31,6 @@ class Login extends Component {
 						this.props.history.push("/");
 					})
 					.catch(function(error) {
-						// Handle Errors here.
 						var errorCode = error.code;
 						var errorMessage = error.message;
 						notification["error"]({
