@@ -24,11 +24,19 @@ class Login extends Component {
 		this.props.form.validateFields((err, values) => {
 			var email = values.email;
 			var password = values.password;
+			var remember = values.remember;
+			var persistence;
+
+			if (remember) {
+				persistence = firebase.auth.Auth.Persistence.LOCAL;
+			} else {
+				persistence = firebase.auth.Auth.Persistence.NONE;
+			}
 
 			if (!err) {
 				firebase
 					.auth()
-					.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+					.setPersistence(persistence)
 					.then(function() {
 						return firebase
 							.auth()
