@@ -41,17 +41,17 @@ class App extends React.Component {
 	}
 
 	checkIfUserIsLoggedIn = () => {
-		var user = firebase.auth().currentUser;
-
-		if (user) {
-			this.setState({
-				isLoggedIn: true
-			});
-		} else {
-			this.setState({
-				isLoggedIn: false
-			});
-		}
+		firebase.auth().onAuthStateChanged(user => {
+			if (user) {
+				this.setState({
+					isLoggedIn: true
+				});
+			} else {
+				this.setState({
+					isLoggedIn: false
+				});
+			}
+		});
 	};
 
 	onChangeInvestment = value => {

@@ -2,25 +2,30 @@ import React, { Component } from "react";
 import { Form, Icon, Input, Button, Checkbox, notification } from "antd";
 import * as ROUTES from "../Constants/routes";
 import { Link, withRouter } from "react-router-dom";
-import firebase from "../Constants/firebase";
+import * as firebase from "firebase/app";
 import "firebase/auth";
 
 class Login extends Component {
-	state = {
-		isLoading: false
-	};
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			isLoading: false
+		};
+	}
 
 	handleSubmit = e => {
 		e.preventDefault();
 
-		this.setState({ isLoading: true });
+		this.setState({
+			isLoading: true
+		});
 
 		this.props.form.validateFields((err, values) => {
 			var email = values.email;
 			var password = values.password;
 
 			if (!err) {
-				this.setState({ isLoading: false });
 				firebase
 					.auth()
 					.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
@@ -30,6 +35,7 @@ class Login extends Component {
 							.signInWithEmailAndPassword(email, password);
 					})
 					.then(() => {
+						this.setState({ isLoading: false });
 						notification["success"]({
 							message: "Success",
 							description: "You are logged in!"
