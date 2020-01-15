@@ -22,7 +22,7 @@ class Signup extends Component {
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			var email = values.email;
 			var password = values.password;
-			var username = values.username;
+			//var username = values.username;
 
 			if (!err) {
 				firebase

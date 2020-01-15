@@ -3,6 +3,7 @@ import { Form, Icon, Input, Button, Checkbox, notification } from "antd";
 import * as ROUTES from "../Constants/routes";
 import { Link, withRouter } from "react-router-dom";
 import firebase from "../Constants/firebase";
+import "firebase/auth";
 
 class Login extends Component {
 	state = {
@@ -22,7 +23,12 @@ class Login extends Component {
 				this.setState({ isLoading: false });
 				firebase
 					.auth()
-					.signInWithEmailAndPassword(email, password)
+					.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+					.then(function() {
+						return firebase
+							.auth()
+							.signInWithEmailAndPassword(email, password);
+					})
 					.then(() => {
 						notification["success"]({
 							message: "Success",
@@ -41,8 +47,6 @@ class Login extends Component {
 			}
 		});
 	};
-
-	test = () => {};
 
 	render() {
 		const { getFieldDecorator } = this.props.form;
@@ -112,6 +116,6 @@ class Login extends Component {
 	}
 }
 
-const WrappedLoginForm = Form.create({ name: "normal_login" })(Login);
+const WrappedLoginForm = Form.create({ name: "login" })(Login);
 
 export default withRouter(WrappedLoginForm);
