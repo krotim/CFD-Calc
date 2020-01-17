@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button, Select, Icon, Menu, notification } from "antd";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../Constants/routes";
+import Symbols from "./Symbols";
 import firebase from "../Constants/firebase";
 import "firebase/firestore";
 
@@ -35,6 +36,7 @@ export class Settings extends Component {
 						<Link to={ROUTES.LANDING}>Home</Link>
 					</Menu.Item>
 				</Menu>
+				<Symbols />
 			</div>
 		);
 	}

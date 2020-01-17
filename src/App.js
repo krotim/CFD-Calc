@@ -22,7 +22,7 @@ class App extends React.Component {
 		super(props);
 
 		this.state = {
-			isLoggedIn: false,
+			isLoggedIn: Boolean,
 			Investment: null,
 			Direction: "Long",
 			Leverage: null,

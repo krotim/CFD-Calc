@@ -41,3 +41,11 @@ Investors mostly have few cfds/stocks in which they invest, so that is why if yo
 #### News
 
 By searching for some cfd/stock company like "APPLE" in your search input you will get latest news that can affect cfd/stock price.
+
+#### Tehnologije
+
+React.JS + Firebase
+
+#### Članovi tima
+
+Kristijan Rotim
