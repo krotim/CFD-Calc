@@ -46,6 +46,6 @@ By searching for some cfd/stock company like "APPLE" in your search input you wi
 
 React.JS + Firebase
 
-#### Članovi tima
+#### Članovi
 
 Kristijan Rotim
