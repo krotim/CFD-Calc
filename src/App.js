@@ -8,7 +8,8 @@ import {
 	Icon,
 	message,
 	Menu,
-	notification
+	notification,
+	Avatar
 } from "antd";
 import { Link } from "react-router-dom";
 import * as ROUTES from "./Constants/routes";
@@ -131,9 +132,15 @@ class App extends React.Component {
 
 		if (isLoggedIn) {
 			button = (
-				<Button onClick={this.signOut} type="danger">
-					SignOut
-				</Button>
+				<div>
+					<Button onClick={this.signOut} type="danger">
+						SignOut
+					</Button>
+					<Link className="margin-10" to={ROUTES.SETTINGS}>
+						<Icon type="setting" />
+						Settings
+					</Link>
+				</div>
 			);
 		} else {
 			button = <Link to={ROUTES.LOG_IN}>Login/Signup</Link>;
@@ -143,8 +150,14 @@ class App extends React.Component {
 			<div className="App">
 				<Menu onClick={this.handleClick} mode="horizontal" theme="dark">
 					<Menu.Item key="main">
-						<Icon type="calculator" />
-						CFD Calc
+						<Avatar
+							style={{
+								color: "#f56a00",
+								backgroundColor: "#fde3cf"
+							}}
+						>
+							KR
+						</Avatar>
 					</Menu.Item>
 					<Menu.Item className="float-right" key="login">
 						{button}

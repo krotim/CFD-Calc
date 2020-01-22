@@ -2,7 +2,7 @@
 	"name": "cfd_calc",
 	"version": "0.1.0",
 	"private": true,
-	"proxy": "https://pkgstore.datahub.io",
+	"proxy": "https://api.worldtradingdata.com",
 	"dependencies": {
 		"@testing-library/jest-dom": "^4.2.4",
 		"@testing-library/react": "^9.4.0",

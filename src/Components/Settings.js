@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Button, Select, Icon, Menu, notification } from "antd";
+import { Menu, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../Constants/routes";
 import Symbols from "./Symbols";
-import firebase from "../Constants/firebase";
+//import firebase from "../Constants/firebase";
 import "firebase/firestore";
 
 export class Settings extends Component {
@@ -29,8 +29,14 @@ export class Settings extends Component {
 			<div>
 				<Menu mode="horizontal" theme="dark">
 					<Menu.Item key="main">
-						<Icon type="calculator" />
-						CFD Calc
+						<Avatar
+							style={{
+								color: "#f56a00",
+								backgroundColor: "#fde3cf"
+							}}
+						>
+							KR
+						</Avatar>
 					</Menu.Item>
 					<Menu.Item className="float-right" key="home">
 						<Link to={ROUTES.LANDING}>Home</Link>
