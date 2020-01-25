@@ -8,17 +8,17 @@ import * as ROUTES from "./Constants/routes";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
 import Settings from "./Components/Settings";
+import "./Style/main.sass";
+import User from "./Components/User";
 
 ReactDOM.render(
 	<Router>
-		<Route exact path={ROUTES.LANDING} component={App} />
-		<Route path={ROUTES.LOG_IN} component={Login} />
-		<Route path={ROUTES.SIGN_UP} component={Signup} />
-		<Route path={ROUTES.SETTINGS} component={Settings} />
+		<User>
+			<Route exact path={ROUTES.LANDING} component={App} />
+			<Route path={ROUTES.LOG_IN} component={Login} />
+			<Route path={ROUTES.SIGN_UP} component={Signup} />
+			<Route path={ROUTES.SETTINGS} component={Settings} />
+		</User>
 	</Router>,
 	document.getElementById("root")
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA

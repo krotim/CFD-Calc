@@ -26,7 +26,6 @@ export class Symbols extends Component {
 
 	populateSymbolsFromAPI = symbol => {
 		const allSymbolsCopy = [];
-		console.log(allSymbolsCopy);
 		axios
 			.get(
 				`/api/v1/stock_search?search_term=${symbol}&limit=50&page=1&api_token=ER823ms94FSWYnXVpkOB80oA1BXFSp8eRUDlIuLUHuxN0gDKlC5bc9D0HZEq`
@@ -42,7 +41,6 @@ export class Symbols extends Component {
 				});
 
 				this.setState({ AllSymbols: allSymbolsCopy });
-				console.log(this.state.AllSymbols);
 			});
 	};
 

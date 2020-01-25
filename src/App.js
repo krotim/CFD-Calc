@@ -6,24 +6,22 @@ import {
 	Card,
 	Statistic,
 	Icon,
-	message,
-	Menu,
-	notification,
-	Avatar
+	message
 } from "antd";
-import { Link } from "react-router-dom";
-import * as ROUTES from "./Constants/routes";
-import "./Style/main.sass";
-import firebase from "./Constants/firebase";
+import Navbar from "./Components/Navbar";
+import { UserContext } from "./Components/User";
+import News from "./Components/News";
 
 const { Option } = Select;
 
 class App extends React.Component {
+	static contextType = UserContext;
+
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			isLoggedIn: Boolean,
+			isLoggedIn: false,
 			Investment: null,
 			Direction: "Long",
 			Leverage: null,
@@ -37,23 +35,15 @@ class App extends React.Component {
 		};
 	}
 
-	componentDidMount() {
-		this.checkIfUserIsLoggedIn();
-	}
+	static getDerivedStateFromProps(props, state) {
+		if (props.context.state.isLoggedIn !== state.isLoggedIn) {
+			return {
+				isLoggedIn: props.context.state.isLoggedIn
+			};
+		}
 
-	checkIfUserIsLoggedIn = () => {
-		firebase.auth().onAuthStateChanged(user => {
-			if (user) {
-				this.setState({
-					isLoggedIn: true
-				});
-			} else {
-				this.setState({
-					isLoggedIn: false
-				});
-			}
-		});
-	};
+		return null;
+	}
 
 	onChangeInvestment = value => {
 		this.setState({ Investment: value });
@@ -110,59 +100,24 @@ class App extends React.Component {
 		}
 	};
 
-	signOut = () => {
-		firebase
-			.auth()
-			.signOut()
-			.then(function() {
-				window.location.reload();
-			})
-			.catch(function(error) {
-				notification["error"]({
-					message: "Error",
-					description: error
-				});
-			});
+	updateUser = () => {
+		this.setState({
+			isLoggedIn: this.context.isLoggedIn
+		});
 	};
 
 	render() {
-		//Render login/signup button conditionaly
-		const isLoggedIn = this.state.isLoggedIn;
-		let button;
+		let news;
 
-		if (isLoggedIn) {
-			button = (
-				<div>
-					<Button onClick={this.signOut} type="danger">
-						SignOut
-					</Button>
-					<Link className="margin-10" to={ROUTES.SETTINGS}>
-						<Icon type="setting" />
-						Settings
-					</Link>
-				</div>
-			);
+		if (this.state.isLoggedIn) {
+			news = <News />;
 		} else {
-			button = <Link to={ROUTES.LOG_IN}>Login/Signup</Link>;
+			news = null;
 		}
 
 		return (
 			<div className="App">
-				<Menu onClick={this.handleClick} mode="horizontal" theme="dark">
-					<Menu.Item key="main">
-						<Avatar
-							style={{
-								color: "#f56a00",
-								backgroundColor: "#fde3cf"
-							}}
-						>
-							KR
-						</Avatar>
-					</Menu.Item>
-					<Menu.Item className="float-right" key="login">
-						{button}
-					</Menu.Item>
-				</Menu>
+				<Navbar />
 				<section id="form">
 					<div className="form">
 						<InputNumber
@@ -208,16 +163,23 @@ class App extends React.Component {
 								title="Result"
 								value={this.state.Result}
 								precision={2}
-								valueStyle={{ color: this.state.stat.color }}
+								valueStyle={{
+									color: this.state.stat.color
+								}}
 								prefix="$"
 								suffix={<Icon type={this.state.stat.arrow} />}
 							/>
 						</Card>
 					</div>
 				</section>
+				{news}
 			</div>
 		);
 	}
 }
 
-export default App;
+export default props => (
+	<UserContext.Consumer>
+		{state => <App context={state} />}
+	</UserContext.Consumer>
+);
