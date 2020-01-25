@@ -10,7 +10,10 @@ export class User extends Component {
 
 		this.state = {
 			isLoggedIn: false,
-			userId: null
+			userId: null,
+			symbols: [],
+			username: "-",
+			email: ""
 		};
 	}
 
@@ -38,12 +41,8 @@ export class User extends Component {
 			if (user) {
 				this.setState({
 					isLoggedIn: true,
-					userId: user.uid
-				});
-			} else {
-				this.setState({
-					isLoggedIn: false,
-					userId: null
+					userId: user.uid,
+					email: user.email
 				});
 			}
 		});
@@ -52,7 +51,7 @@ export class User extends Component {
 	render() {
 		return (
 			<UserContext.Provider
-				value={{ state: this.state, signOut: this.signOut }}
+				value={{ data: this.state, signOut: this.signOut }}
 			>
 				{this.props.children}
 			</UserContext.Provider>

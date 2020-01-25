@@ -16,9 +16,9 @@ export class Navbar extends Component {
 	}
 
 	static getDerivedStateFromProps(props, state) {
-		if (props.context.state.isLoggedIn !== state.isLoggedIn) {
+		if (props.context.data.isLoggedIn !== state.isLoggedIn) {
 			return {
-				isLoggedIn: props.context.state.isLoggedIn
+				isLoggedIn: props.context.data.isLoggedIn
 			};
 		}
 
@@ -32,13 +32,17 @@ export class Navbar extends Component {
 		if (isLoggedIn) {
 			button = (
 				<div>
-					<Button onClick={this.props.context.signOut} type="danger">
-						SignOut
-					</Button>
+					<Link className="margin-10" to={ROUTES.LANDING}>
+						<Icon type="home" />
+						Home
+					</Link>
 					<Link className="margin-10" to={ROUTES.SETTINGS}>
 						<Icon type="setting" />
 						Settings
 					</Link>
+					<Button onClick={this.props.context.signOut} type="danger">
+						SignOut
+					</Button>
 				</div>
 			);
 		} else {
@@ -46,7 +50,7 @@ export class Navbar extends Component {
 		}
 		return (
 			<div>
-				<Menu onClick={this.handleClick} mode="horizontal" theme="dark">
+				<Menu mode="horizontal" theme="dark">
 					<Menu.Item key="main">
 						<Avatar
 							style={{
