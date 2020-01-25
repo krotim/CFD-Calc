@@ -100,12 +100,6 @@ class App extends React.Component {
 		}
 	};
 
-	updateUser = () => {
-		this.setState({
-			isLoggedIn: this.context.isLoggedIn
-		});
-	};
-
 	render() {
 		let news;
 
