@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Menu, Avatar } from "antd";
-import { Link } from "react-router-dom";
-import * as ROUTES from "../Constants/routes";
 import Symbols from "./Symbols";
-//import firebase from "../Constants/firebase";
-import "firebase/firestore";
+import Navbar from "./Navbar";
+import { Descriptions } from "antd";
+import { UserContext } from "./User";
 
 export class Settings extends Component {
+	static contextType = UserContext;
+
 	constructor(props) {
 		super(props);
 
@@ -18,34 +18,38 @@ export class Settings extends Component {
 		};
 	}
 
-	componentDidMount() {
-		this.getUser();
-	}
+	static getDerivedStateFromProps(props, state) {
+		if (props.context.data.email !== state.email) {
+			return {
+				email: props.context.data.email,
+				username: props.context.data.username
+			};
+		}
 
-	getUser = () => {};
+		return null;
+	}
 
 	render() {
 		return (
 			<div>
-				<Menu mode="horizontal" theme="dark">
-					<Menu.Item key="main">
-						<Avatar
-							style={{
-								color: "#f56a00",
-								backgroundColor: "#fde3cf"
-							}}
-						>
-							KR
-						</Avatar>
-					</Menu.Item>
-					<Menu.Item className="float-right" key="home">
-						<Link to={ROUTES.LANDING}>Home</Link>
-					</Menu.Item>
-				</Menu>
+				<Navbar />
 				<Symbols />
+				<Descriptions title="User Info">
+					<Descriptions.Item label="E-Mail">
+						{this.state.email}
+					</Descriptions.Item>
+					<Descriptions.Item label="UserName">
+						{this.state.username}
+					</Descriptions.Item>
+				</Descriptions>
+				,
 			</div>
 		);
 	}
 }
 
-export default Settings;
+export default props => (
+	<UserContext.Consumer>
+		{state => <Settings context={state} />}
+	</UserContext.Consumer>
+);
