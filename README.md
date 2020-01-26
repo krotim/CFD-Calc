@@ -28,12 +28,15 @@ In the project directory, you can run:
 If you plan on using the web app you should consider singing up, and here is why
 
 **_1. Symbols_**
+
 Investors mostly have few cfds/stocks in which they invest, so that is why if you are user you have an option to save 5 cfds/stocks symbols so when you land on main page you can use them as call to retrieve current cfd/stock price.
 
 **_2. News_**
+
 By searching for some cfd/stock company like "APPLE" in your search input you will get latest news that can affect cfd/stock price.
 
 **_3. Calculate profit/loss after state and city taxes - coming in version 1.1_**
+
 You'll be able to enter your profit/loss, state tax and city tax
 
 **Things to Do for v1 Release (31.01.2020.)**
