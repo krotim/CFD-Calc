@@ -8,14 +8,11 @@ In the project directory, you can run:
 
 **CFD calc is simple web app that helps you decide in which CFD you should invest based on few key things**
 
-\*\*
-
 1. Investment
 2. Direction
 3. Leverage
 4. Entry Price
 5. Exit Price
-   \*\*
 
 ### Formula for Long direction
 
