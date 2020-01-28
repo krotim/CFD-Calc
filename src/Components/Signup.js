@@ -74,7 +74,7 @@ class Signup extends Component {
 		const { getFieldDecorator } = this.props.form;
 
 		return (
-			<div>
+			<div id="form">
 				<Form className="signup-form" onSubmit={this.handleSubmit}>
 					<Form.Item label="E-mail">
 						{getFieldDecorator("email", {
