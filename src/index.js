@@ -15,10 +15,10 @@ ReactDOM.render(
 	<Router>
 		<User>
 			<Route exact path={ROUTES.LANDING} component={App} />
-			<Route path={ROUTES.LOG_IN} component={Login} />
-			<Route path={ROUTES.SIGN_UP} component={Signup} />
 			<Route path={ROUTES.SETTINGS} component={Settings} />
 		</User>
+		<Route path={ROUTES.LOG_IN} component={Login} />
+		<Route path={ROUTES.SIGN_UP} component={Signup} />
 	</Router>,
 	document.getElementById("root")
 );
