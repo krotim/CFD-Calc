@@ -11,9 +11,8 @@ export class User extends Component {
 		this.state = {
 			isLoggedIn: false,
 			userId: null,
-			symbols: [],
-			username: "-",
-			email: ""
+			email: "",
+			symbols: {}
 		};
 	}
 
@@ -39,6 +38,8 @@ export class User extends Component {
 	checkIfUserIsLoggedIn = () => {
 		firebase.auth().onAuthStateChanged(user => {
 			if (user) {
+				this.getSymbols(user.uid);
+
 				this.setState({
 					isLoggedIn: true,
 					userId: user.uid,
@@ -46,6 +47,24 @@ export class User extends Component {
 				});
 			}
 		});
+	};
+
+	getSymbols = userId => {
+		const db = firebase.firestore();
+		var symbolsRef = db.collection("users").doc(userId);
+
+		symbolsRef
+			.get()
+			.then(symbols => {
+				if (symbols.exists) {
+					this.setState({ symbols: symbols.data() });
+				} else {
+					console.log("No such document!");
+				}
+			})
+			.catch(function(err) {
+				console.log("Error: " + err);
+			});
 	};
 
 	render() {

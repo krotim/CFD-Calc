@@ -8,6 +8,7 @@ import {
 	Icon,
 	message
 } from "antd";
+import axios from "axios";
 import Navbar from "./Components/Navbar";
 import { UserContext } from "./Components/User";
 import News from "./Components/News";
@@ -15,8 +16,6 @@ import News from "./Components/News";
 const { Option } = Select;
 
 class App extends React.Component {
-	static contextType = UserContext;
-
 	constructor(props) {
 		super(props);
 
@@ -31,14 +30,21 @@ class App extends React.Component {
 			stat: {
 				color: "#3f8600",
 				arrow: "arrow-up"
-			}
+			},
+			userSymbols: {},
+			btnLoading: false,
+			currentPrice: 0
 		};
 	}
 
 	static getDerivedStateFromProps(props, state) {
-		if (props.context.data.isLoggedIn !== state.isLoggedIn) {
+		if (
+			props.context.data.isLoggedIn !== state.isLoggedIn &&
+			Object.entries(props.context.data.symbols).length !== 0
+		) {
 			return {
-				isLoggedIn: props.context.data.isLoggedIn
+				isLoggedIn: props.context.data.isLoggedIn,
+				userSymbols: props.context.data.symbols
 			};
 		}
 
@@ -100,13 +106,53 @@ class App extends React.Component {
 		}
 	};
 
+	getStockCurrentPrice = e => {
+		this.setState({ btnLoading: true });
+		axios
+			.get(
+				`https://api.worldtradingdata.com/api/v1/stock?symbol=${e.target.value}&api_token=ER823ms94FSWYnXVpkOB80oA1BXFSp8eRUDlIuLUHuxN0gDKlC5bc9D0HZEq`
+			)
+			.then(result => {
+				const stockData = result.data;
+
+				this.setState({
+					EntryPrice: stockData.data[0].price
+				});
+				this.setState({ btnLoading: false });
+			})
+			.catch(function(error) {
+				message.error(error);
+				this.setState({ btnLoading: false });
+			});
+	};
+
+	displaySimbolBtn = () => {
+		const symbolsArray = Object.values(this.state.userSymbols);
+
+		return (
+			<div>
+				{symbolsArray.map(symbol => (
+					<Button
+						key={symbol}
+						type="primary"
+						value={symbol}
+						onClick={this.getStockCurrentPrice}
+						loading={this.state.btnLoading}
+					>
+						{symbol}
+					</Button>
+				))}
+			</div>
+		);
+	};
+
 	render() {
-		let news;
+		let news = null;
+		let userSymbols = null;
 
 		if (this.state.isLoggedIn) {
 			news = <News />;
-		} else {
-			news = null;
+			userSymbols = this.displaySimbolBtn();
 		}
 
 		return (
@@ -114,6 +160,7 @@ class App extends React.Component {
 				<Navbar />
 				<section id="form">
 					<div className="form">
+						{userSymbols}
 						<InputNumber
 							min={1}
 							placeholder={5}
@@ -141,6 +188,7 @@ class App extends React.Component {
 						/>
 						<InputNumber
 							min={0.1}
+							value={this.state.EntryPrice}
 							placeholder="Entry Price"
 							onChange={this.onChangeEntryPrice}
 						/>
