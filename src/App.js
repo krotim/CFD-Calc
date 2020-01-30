@@ -39,7 +39,7 @@ class App extends React.Component {
 
 	static getDerivedStateFromProps(props, state) {
 		if (
-			props.context.data.isLoggedIn !== state.isLoggedIn &&
+			props.context.data.isLoggedIn !== state.isLoggedIn ||
 			Object.entries(props.context.data.symbols).length !== 0
 		) {
 			return {
