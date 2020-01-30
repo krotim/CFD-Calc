@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Select, Button, message, Card, Spin } from "antd";
+import { Select, Button, message, Card, Spin, Tag } from "antd";
 import axios from "axios";
 import { isEmpty } from "lodash";
 
@@ -48,7 +48,7 @@ class News extends Component {
 			this.setState({ loading: true });
 			axios
 				.get(
-					`https://stocknewsapi.com/api/v1?tickers=${value}&items=9&token=bzfmperupgmjfufheqnno2dterbwfzgppfnbal37`
+					`https://stocknewsapi.com/api/v1?tickers=${value}&items=12&token=bzfmperupgmjfufheqnno2dterbwfzgppfnbal37`
 				)
 				.then(result => {
 					this.setState({ News: result.data.data });
@@ -82,6 +82,7 @@ class News extends Component {
 					<div className="news__cards">
 						{this.state.News.map(data => (
 							<Card
+								key={data.title}
 								className="card"
 								cover={
 									<img alt="example" src={data.image_url} />
@@ -92,18 +93,32 @@ class News extends Component {
 									description={data.text}
 								/>
 								<Button
-									type="link"
+									type="dashed"
 									href={data.news_url}
 									target="_blank"
+									block
 								>
 									Go to news
 								</Button>
+								<Sentiment data={data.sentiment} />
 							</Card>
 						))}
 					</div>
 				</Spin>
 			</div>
 		);
+	}
+}
+
+function Sentiment(props) {
+	const sentiment = props.data;
+
+	if (sentiment === "Positive") {
+		return <Tag color="green">Positive</Tag>;
+	} else if (sentiment === "Neutral") {
+		return <Tag color="blue">Neutral</Tag>;
+	} else {
+		return <Tag color="red">Negative</Tag>;
 	}
 }
 
