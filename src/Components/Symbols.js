@@ -3,6 +3,8 @@ import { Select, Button, message } from "antd";
 import axios from "axios";
 import firebase from "../Constants/firebase";
 import "firebase/firestore";
+import { UserContext } from "./User";
+import { isEmpty } from "lodash";
 
 const { Option } = Select;
 const db = firebase.firestore();
@@ -13,34 +15,40 @@ export class Symbols extends Component {
 
 		this.state = {
 			userId: "",
-			AllSymbols: [],
+			fetchedSymbols: [],
 			DBSymbols: {}
 		};
 	}
 
-	componentDidMount() {
-		firebase.auth().onAuthStateChanged(user => {
-			this.setState({ userId: user.uid });
-		});
+	static getDerivedStateFromProps(props, state) {
+		if (props.context.data.isLoggedIn !== state.isLoggedIn) {
+			return {
+				userId: props.context.data.userId
+			};
+		}
+
+		return null;
 	}
 
 	populateSymbolsFromAPI = symbol => {
-		const allSymbolsCopy = [];
+		const fetchedSymbolsCopy = [];
 		axios
 			.get(
-				`/api/v1/stock_search?search_term=${symbol}&limit=50&page=1&api_token=ER823ms94FSWYnXVpkOB80oA1BXFSp8eRUDlIuLUHuxN0gDKlC5bc9D0HZEq`
+				`https://api.worldtradingdata.com/api/v1/stock_search?search_term=${symbol}&limit=50&page=1&api_token=ER823ms94FSWYnXVpkOB80oA1BXFSp8eRUDlIuLUHuxN0gDKlC5bc9D0HZEq`
 			)
-			.then(res => {
-				const searchData = res.data;
+			.then(result => {
+				const searchData = result.data;
 
-				searchData.data.map(symbol => {
-					return allSymbolsCopy.push({
-						name: symbol.name,
-						symbol: symbol.symbol
+				if (!isEmpty(searchData)) {
+					searchData.data.map(symbol => {
+						return fetchedSymbolsCopy.push({
+							name: symbol.name,
+							symbol: symbol.symbol
+						});
 					});
-				});
+				}
 
-				this.setState({ AllSymbols: allSymbolsCopy });
+				this.setState({ fetchedSymbols: fetchedSymbolsCopy });
 			});
 	};
 
@@ -50,7 +58,7 @@ export class Symbols extends Component {
 		this.setState({ DBSymbols: DBSymbolsCopy });
 	};
 
-	fetchUser = value => {
+	fetchSymbols = value => {
 		this.populateSymbolsFromAPI(value);
 	};
 
@@ -74,9 +82,9 @@ export class Symbols extends Component {
 					style={{ width: "100%" }}
 					placeholder="Search for symbols"
 					onChange={this.handleChange}
-					onSearch={this.fetchUser}
+					onSearch={this.fetchSymbols}
 				>
-					{this.state.AllSymbols.map(data => (
+					{this.state.fetchedSymbols.map(data => (
 						<Option key={data.symbol}>
 							{data.name} - ({data.symbol})
 						</Option>
@@ -94,4 +102,8 @@ export class Symbols extends Component {
 	}
 }
 
-export default Symbols;
+export default props => (
+	<UserContext.Consumer>
+		{state => <Symbols context={state} />}
+	</UserContext.Consumer>
+);

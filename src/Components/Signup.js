@@ -1,20 +1,13 @@
 import React, { Component } from "react";
-import {
-	Form,
-	Input,
-	Tooltip,
-	Icon,
-	Checkbox,
-	Button,
-	notification
-} from "antd";
+import { Form, Input, Checkbox, Button, notification } from "antd";
 import firebase from "../Constants/firebase";
 import "firebase/firestore";
 import { withRouter } from "react-router-dom";
 
 class Signup extends Component {
 	state = {
-		confirmDirty: false
+		confirmDirty: false,
+		isLoading: false
 	};
 
 	handleSubmit = e => {
@@ -22,20 +15,22 @@ class Signup extends Component {
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			var email = values.email;
 			var password = values.password;
-			//var username = values.username;
 
-			if (!err) {
+			if (!err && values.agreement) {
+				this.setState({ isLoading: true });
 				firebase
 					.auth()
 					.createUserWithEmailAndPassword(email, password)
 					.then(() => {
+						this.setState({ isLoading: false });
 						notification["success"]({
 							message: "Success",
 							description: "You are in!"
 						});
 						this.props.history.push("/");
 					})
-					.catch(function(error) {
+					.catch(error => {
+						this.setState({ isLoading: false });
 						var errorCode = error.code;
 						var errorMessage = error.message;
 
@@ -44,6 +39,20 @@ class Signup extends Component {
 							description: errorMessage
 						});
 					});
+			} else {
+				this.setState({ isLoading: false });
+				if (err) {
+					notification["error"]({
+						message: "Error",
+						description: "Fill the empty fields!"
+					});
+				}
+				if (!values.agreement) {
+					notification["error"]({
+						message: "Error",
+						description: "Read agreements!"
+					});
+				}
 			}
 		});
 	};
@@ -116,26 +125,6 @@ class Signup extends Component {
 							]
 						})(<Input.Password onBlur={this.handleConfirmBlur} />)}
 					</Form.Item>
-					<Form.Item
-						label={
-							<span>
-								Username&nbsp;
-								<Tooltip title="What do you want others to call you?">
-									<Icon type="question-circle-o" />
-								</Tooltip>
-							</span>
-						}
-					>
-						{getFieldDecorator("username", {
-							rules: [
-								{
-									required: true,
-									message: "Please input your username!",
-									whitespace: true
-								}
-							]
-						})(<Input />)}
-					</Form.Item>
 					<Form.Item>
 						{getFieldDecorator("agreement", {
 							valuePropName: "checked"
@@ -149,7 +138,12 @@ class Signup extends Component {
 						)}
 					</Form.Item>
 					<Form.Item>
-						<Button type="primary" htmlType="submit">
+						<Button
+							type="primary"
+							htmlType="submit"
+							block
+							loading={this.state.isLoading}
+						>
 							Register
 						</Button>
 					</Form.Item>

@@ -12,8 +12,7 @@ export class Settings extends Component {
 
 		this.state = {
 			user: {
-				email: String,
-				username: String
+				email: String
 			}
 		};
 	}
@@ -21,8 +20,9 @@ export class Settings extends Component {
 	static getDerivedStateFromProps(props, state) {
 		if (props.context.data.email !== state.email) {
 			return {
-				email: props.context.data.email,
-				username: props.context.data.username
+				user: {
+					email: props.context.data.email
+				}
 			};
 		}
 
@@ -36,11 +36,9 @@ export class Settings extends Component {
 				<Symbols />
 				<Descriptions title="User Info">
 					<Descriptions.Item label="E-Mail">
-						{this.state.email}
+						{this.state.user.email}
 					</Descriptions.Item>
-					<Descriptions.Item label="UserName">
-						{this.state.username}
-					</Descriptions.Item>
+					<Descriptions.Item label="UserName">-</Descriptions.Item>
 				</Descriptions>
 				,
 			</div>
